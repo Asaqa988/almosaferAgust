@@ -5,7 +5,7 @@
     <classes>
       <class name="MyTestcases">
         <methods>
-          <include name="changeTheLanguageofTheWebsiteRandomly"/>
+          <include name="CheckTheDateOfTheWebSite"/>
           <include name="myBeforeTest"/>
         </methods>
       </class> <!-- MyTestcases -->
