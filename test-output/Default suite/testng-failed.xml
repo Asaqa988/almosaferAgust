@@ -5,8 +5,9 @@
     <classes>
       <class name="MyTestcases">
         <methods>
+          <include name="myAfterTest"/>
+          <include name="CheckTheDateOfTheWebSite"/>
           <include name="myBeforeTest"/>
-          <include name="HotelTabSwitch"/>
         </methods>
       </class> <!-- MyTestcases -->
     </classes>

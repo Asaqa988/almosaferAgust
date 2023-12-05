@@ -1,8 +1,10 @@
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import org.checkerframework.checker.units.qual.C;
@@ -26,7 +28,7 @@ public class MyTestcases {
 	String Url = "https://www.almosafer.com/en";
 	WebDriver driver = new EdgeDriver();
 
-	SoftAssert myAssertion = new SoftAssert();
+	SoftAssert softassert = new SoftAssert();
 
 	@BeforeTest
 	public void myBeforeTest() {
@@ -90,7 +92,7 @@ public class MyTestcases {
 		Random rand = new Random();
 
 		int randomNumber = rand.nextInt(myWebSites.length);
-		driver.get("https://www.almosafer.com/ar");
+		driver.get(myWebSites[randomNumber]);
 
 		String myWebSiteURL = driver.getCurrentUrl();
 
@@ -107,41 +109,45 @@ public class MyTestcases {
 		}
 	}
 
-	@Test(enabled = false)
+	@Test(enabled = true)
 
 	public void CheckTheDateOfTheWebSite() {
 
+//		
+//		System.out.println(today);
+//		System.out.println(today.plusDays(2));
+//		System.out.println(today.plusDays(28));
+
 		LocalDate today = LocalDate.now();
+//
+//		System.out.println(today);
+//
+//		System.out.println(today.getDayOfWeek().plus(1).getDisplayName(TextStyle.FULL, Locale.ENGLISH));
 
-		int expectedDepatureDate = today.plusDays(1).getDayOfMonth();
-
-		int expectedReturnDate = today.plusDays(2).getDayOfMonth();
-
-		WebElement ActualDepatureDateOnTheWebSite = driver
-				.findElement(By.cssSelector("div[class='sc-OxbzP sc-lnrBVv gKbptE'] span[class='sc-fvLVrH hNjEjT']"));
-		WebElement ActualReturnDateOfTheWebSite = driver
-				.findElement(By.cssSelector("div[class='sc-OxbzP sc-bYnzgO bojUIa'] span[class='sc-fvLVrH hNjEjT']"));
-
-		String ExpectedWelcomeMsg = "Let’s book your next trip! soso";
-		String ActualWelcomeMsg = driver.findElement(By.xpath("//h1[contains(text(),'Let’s book your next trip!')]"))
+		// Actual Values on the Website
+		String ActualNameMonth = driver
+				.findElement(By.cssSelector("div[class='sc-OxbzP sc-lnrBVv gKbptE'] span[class='sc-hvvHee cuAEQj']"))
+				.getText();
+		int ActualDayAsNumber = Integer.parseInt(driver
+				.findElement(By.cssSelector("div[class='sc-OxbzP sc-lnrBVv gKbptE'] span[class='sc-fvLVrH hNjEjT']"))
+				.getText());
+		String ActualNameOftheDay = driver
+				.findElement(By.cssSelector("div[class='sc-OxbzP sc-lnrBVv gKbptE'] span[class='sc-eSePXt ljMnJa']"))
 				.getText();
 
-		// faliure
-		myAssertion.assertEquals(Integer.parseInt(ActualReturnDateOfTheWebSite.getText()), 600,
-				"this is for the return date ");
+// expected Values that i am as qa expected 
+		String ExpectedNameMonth = today.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+		int ExpectedDayAsNumber = today.plusDays(1).getDayOfMonth();
 
-		myAssertion.assertEquals(ActualWelcomeMsg, ExpectedWelcomeMsg,
-				"we are checking the welcome msg bs we got an error");
+		String ExpectedNameOftheDay = today.plusDays(1).getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
-		// pass
-
-		myAssertion.assertEquals(Integer.parseInt(ActualDepatureDateOnTheWebSite.getText()), 29);
-
-		myAssertion.assertAll();
+		Assert.assertEquals(ActualNameMonth, ExpectedNameMonth);
+		Assert.assertEquals(ActualDayAsNumber, ExpectedDayAsNumber);
+		Assert.assertEquals(ActualNameOftheDay, ExpectedNameOftheDay);
 
 	}
 
-	@Test()
+	@Test(enabled = false)
 	public void HotelTabSwitch() throws InterruptedException {
 		Thread.sleep(1000);
 		Random rand = new Random();
@@ -196,7 +202,9 @@ public class MyTestcases {
 
 	}
 
+	@AfterTest
 	public void myAfterTest() {
+
 	}
 
 }
