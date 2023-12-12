@@ -109,7 +109,7 @@ public class MyTestcases {
 		}
 	}
 
-	@Test(enabled = true)
+	@Test(enabled = false)
 
 	public void CheckTheDateOfTheWebSite() {
 
@@ -147,7 +147,7 @@ public class MyTestcases {
 
 	}
 
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void HotelTabSwitch() throws InterruptedException {
 		Thread.sleep(1000);
 		Random rand = new Random();
@@ -182,6 +182,9 @@ public class MyTestcases {
 					.findElement(By.xpath("//span[@data-testid='HotelSearchResult__resultsFoundCount']")).getText();
 			Assert.assertEquals(resultsFound.contains("وجدنا"), true);
 
+			driver.findElement(By.xpath("//button[contains(text(),'الأقل سعراً')]")).click();
+			Thread.sleep(2000);
+
 		} else {
 			WebElement SearchAboutHotelTab = driver
 					.findElement(By.xpath("//input[@placeholder='Search for hotels or places']"));
@@ -198,7 +201,27 @@ public class MyTestcases {
 			String resultsFound = driver
 					.findElement(By.xpath("//span[@data-testid='HotelSearchResult__resultsFoundCount']")).getText();
 			Assert.assertEquals(resultsFound.contains("found"), true);
+			driver.findElement(By.xpath("//button[normalize-space()='Lowest price']")).click();
+			Thread.sleep(2000);
+
 		}
+
+		WebElement rightSection = driver.findElement(By.xpath("//div[@class='sc-htpNat KtFsv col-9']"));
+		List<WebElement> Prices = rightSection.findElements(By.className("Price__Value"));
+
+		int LowestPrice = 0;
+		int HighestPrice = 0;
+
+		for (int i = 0; i < Prices.size(); i++) {
+
+			LowestPrice = Integer.parseInt(Prices.get(0).getText());
+			HighestPrice = Integer.parseInt(Prices.get(Prices.size() - 1).getText());
+
+			Assert.assertEquals(LowestPrice < HighestPrice, true);
+
+		}
+		System.out.println(LowestPrice + " this is the lowest price ");
+		System.out.println(HighestPrice + " this is the highest price ");
 
 	}
 
